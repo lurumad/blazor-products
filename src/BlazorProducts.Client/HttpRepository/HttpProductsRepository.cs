@@ -1,4 +1,5 @@
 ﻿using BlazorProducts.Client.Features;
+using BlazorProducts.Shared;
 using BlazorProducts.Shared.Configuration;
 using BlazorProducts.Shared.Models;
 using BlazorProducts.Shared.RequestFeatures;
@@ -22,7 +23,6 @@ namespace BlazorProducts.Client.HttpRepository
     {
         private readonly ApiConfiguration apiConfiguration = new ApiConfiguration();
         private readonly HttpClient client;
-        private readonly NavigationManager navigationManager;
         private readonly JsonSerializerOptions options = new JsonSerializerOptions
         {
             PropertyNameCaseInsensitive = true
@@ -30,11 +30,9 @@ namespace BlazorProducts.Client.HttpRepository
 
         public HttpProductsRepository(
             HttpClient client,
-            NavigationManager navigationManager,
             IOptions<ApiConfiguration> options)
         {
             this.client = client;
-            this.navigationManager = navigationManager;
             apiConfiguration = options.Value;
         }
 
@@ -51,27 +49,19 @@ namespace BlazorProducts.Client.HttpRepository
             return product;
         }
 
-        public async Task<PagingResponse<Product>> Products(ProductParameters productParameters)
+        public async Task<VirtualizeResponse<Product>> Products(ProductParameters productParameters)
         {
             var queryStringParam = new Dictionary<string, string>
             {
-                ["pageNumber"] = productParameters.PageNumber.ToString(),
                 ["pageSize"] = productParameters.PageSize.ToString(),
-                ["searchTerm"] = productParameters.SearchTerm is null ? string.Empty : productParameters.SearchTerm,
-                ["orderBy"] = productParameters.OrderBy is null ? string.Empty : productParameters.OrderBy
+                ["startIndex"] = productParameters.StartIndex.ToString()
             };
 
             var response = await client.GetAsync(QueryHelpers.AddQueryString("products", queryStringParam));
 
             var content = await response.Content.ReadAsStringAsync();
 
-            var pagingResponse = new PagingResponse<Product>
-            {
-                Items = JsonSerializer.Deserialize<List<Product>>(content, options),
-                MetaData = JsonSerializer.Deserialize<MetaData>(response.Headers.GetValues("X-Pagination").First(), options)
-            };
-
-            return pagingResponse;
+            return JsonSerializer.Deserialize<VirtualizeResponse<Product>>(content, options);
         }
 
         public async Task Update(Product product) =>

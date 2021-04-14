@@ -31,9 +31,9 @@ namespace BlazorProducts.Api.Controllers
 
         [HttpGet]
         [Route("{id:guid}")]
-        [ProducesResponseType(typeof(IEnumerable<Shared.Models.Product>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Product), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Shared.Models.Product>>> Get(Guid id)
+        public async Task<ActionResult<Product>> Get(Guid id)
         {
             var product = await _dbContext.Products.SingleOrDefaultAsync(p => p.Id == id);
 
@@ -46,14 +46,18 @@ namespace BlazorProducts.Api.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(PagedList<Shared.Models.Product>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Shared.VirtualizeResponse<Product>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<Shared.Models.Product>>> Get([FromQuery] ProductParameters productParameters)
+        public async Task<ActionResult<Shared.VirtualizeResponse<Product>>> Get([FromQuery] ProductParameters productParameters)
         {
+            var totalSize = await _dbContext.Products.CountAsync();
             var products = await _dbContext.Products
-                .Search(productParameters.SearchTerm)
-                .Sort(productParameters.OrderBy)
-                .Select(p => new Shared.Models.Product
+                //.Search(productParameters.SearchTerm)
+                //.Sort(productParameters.OrderBy)
+                .Skip(productParameters.StartIndex)
+                .Take(productParameters.PageSize)
+                .OrderBy(p => p.Id)
+                .Select(p => new Product
                 {
                     Id = p.Id,
                     Name = p.Name,
@@ -64,14 +68,7 @@ namespace BlazorProducts.Api.Controllers
                 })
                 .ToListAsync();
 
-            var pagedList = PagedList<Shared.Models.Product>.ToPagedList(
-                    products,
-                    productParameters.PageNumber,
-                    productParameters.PageSize);
-
-            Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(pagedList.MetaData));
-
-            return Ok(pagedList);
+            return Ok(new Shared.VirtualizeResponse<Product> { Items = products, TotalSize = totalSize });
         }
 
         [HttpPost]

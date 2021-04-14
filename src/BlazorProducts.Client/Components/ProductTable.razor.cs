@@ -1,8 +1,11 @@
 ﻿using BlazorProducts.Client.Shared;
 using BlazorProducts.Shared.Models;
+using BlazorProducts.Shared.RequestFeatures;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Web.Virtualization;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace BlazorProducts.Client.Components
@@ -16,7 +19,26 @@ namespace BlazorProducts.Client.Components
         public List<Product> Products { get; set; }
 
         [Parameter]
+        public int TotalSize { get; set; }
+
+        [Parameter]
         public EventCallback<Guid> OnDelete { get; set; }
+
+        [Parameter]
+        public EventCallback<ProductParameters> OnScroll { get; set; }
+
+        private async ValueTask<ItemsProviderResult<Product>> LoadProducts(ItemsProviderRequest request)
+        {
+            var productNumber = Math.Min(request.Count, TotalSize - request.StartIndex);
+
+            await OnScroll.InvokeAsync(new ProductParameters
+            {
+                StartIndex = request.StartIndex,
+                PageSize = productNumber == 0 ? request.Count : productNumber
+            });
+
+            return new ItemsProviderResult<Product>(Products, TotalSize);
+        }
 
         private void CallConfirmationModal(Guid id)
         {

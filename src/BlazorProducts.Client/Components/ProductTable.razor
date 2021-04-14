@@ -1,19 +1,17 @@
-﻿@if (Products.Any())
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">Name</th>
-                <th scope="col">Supplier</th>
-                <th scope="col">Price</th>
-                <th scope="col">Update</th>
-                <th scope="col">Delete</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var product in Products)
-            {
+﻿<table class="table">
+    <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Name</th>
+            <th scope="col">Supplier</th>
+            <th scope="col">Price</th>
+            <th scope="col">Update</th>
+            <th scope="col">Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <Virtualize ItemsProvider="LoadProducts" Context="product" ItemSize="300">
+            <ItemContent>
                 <tr>
                     <td>
                         <a href="/product/@product.Id">
@@ -40,17 +38,11 @@
                         <button type="button" class="btn btn-danger" @onclick="() => CallConfirmationModal(product.Id)">Delete</button>
                     </td>
                 </tr>
-            }
-        </tbody>
-    </table>
-    <Confirmation 
-        OnOKClicked="DeleteProduct" 
-        BodyMessage="Do you want to delete this product?"
-        @ref="confirmation"/>
-}
-else
-{
-    <span>
-        Loading products...
-    </span>
-}
+            </ItemContent>
+        </Virtualize>
+    </tbody>
+</table>
+<Confirmation 
+    OnOKClicked="DeleteProduct"
+    BodyMessage="Do you want to delete this product?"
+    @ref="confirmation" />

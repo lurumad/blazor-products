@@ -12,8 +12,7 @@ namespace BlazorProducts.Client.Pages
     public partial class Products : IDisposable
     {
         public List<Product> ProductList { get; set; } = new List<Product>();
-        public MetaData MetaData { get; set; } = new MetaData();
-        private ProductParameters productParameters = new ProductParameters();
+        public int TotalSize { get; set; }
 
         [Inject]
         public HttpInterceptorService Interceptor { get; set; }
@@ -21,58 +20,21 @@ namespace BlazorProducts.Client.Pages
         [Inject]
         public IHttpProductsRepository Repository { get; set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override void OnInitialized()
         {
             Interceptor.RegisterEvent();
-            await LoadProducts();
         }
 
-        public async Task SelectedPage(int page)
+        public async Task LoadProducts(ProductParameters productParameters)
         {
-            productParameters.PageNumber = page;
-            await LoadProducts();
-        }
-
-        public async Task LoadProducts()
-        {
-            var pagingResponse = await Repository.Products(productParameters);
-            ProductList = pagingResponse.Items;
-            MetaData = pagingResponse.MetaData;
-        }
-
-        public async Task SetPageSize(int pageSize)
-        {
-            productParameters.PageSize = pageSize;
-            productParameters.PageNumber = 1;
-
-            await LoadProducts();
-        }
-
-        private async Task SearchChanged(string searchTerm)
-        {
-            productParameters.PageNumber = 1;
-            productParameters.SearchTerm = searchTerm;
-
-            await LoadProducts();
-        }
-
-        private async Task SortChanged(string orderBy)
-        {
-            productParameters.OrderBy = orderBy;
-
-            await LoadProducts();
+            var virtualizeResponse = await Repository.Products(productParameters);
+            ProductList = virtualizeResponse.Items;
+            TotalSize = virtualizeResponse.TotalSize;
         }
 
         private async Task DeleteProduct(Guid id)
         {
             await Repository.Delete(id);
-
-            if (productParameters.PageNumber > 1 && ProductList.Count == 1)
-            {
-                productParameters.PageNumber--;
-            }
-
-            await LoadProducts();
         }
 
         public void Dispose() => Interceptor.DisposeEvent();
