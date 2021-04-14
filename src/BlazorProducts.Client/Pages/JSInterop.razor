@@ -1,0 +1,99 @@
+﻿@page "/jsinterop"
+
+<div class="row">
+    <div class="col-md-4">
+        <h1>
+            Calling JS void function from C#
+        </h1>
+    </div>
+    <div class="col-md-6">
+        <button type="button" class="btn btn-info" @onclick="ShowAlert">
+            Click me!
+        </button>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h1>
+            Calling JS void function passing object from C#
+        </h1>
+    </div>
+    <div class="col-md-6">
+        <button type="button" class="btn btn-info" @onclick="ShowAlertObject">
+            Click me!
+        </button>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h1>
+            Calling JS return function from C#
+        </h1>
+    </div>
+    <div class="col-md-6">
+        <button type="button" class="btn btn-info" @onclick="ShowPrompt">
+            Click me!
+        </button>
+        <h1>
+            @email
+        </h1>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h1>
+            Calling JS return function complex object from C#
+        </h1>
+    </div>
+    <div class="col-md-6">
+        <button type="button" class="btn btn-info" @onclick="ShowComplexObject">
+            Click me!
+        </button>
+        <h1>
+            @message
+        </h1>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h1>
+            Passing HTLM reference to JS function:
+        </h1>
+    </div>
+    <div class="col-md-2">
+        <input type="text" @ref="element" class="form-control" />
+    </div>
+    <div class="col-md-4">
+        <button type="button" class="btn btn-info" @onclick="FocusAndStyleElement">
+            Click me!
+        </button>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <h1>
+            Passing Input component to JS function:
+        </h1>
+    </div>
+    <div class="col-md-2">
+        <EditForm Model="person">
+            <InputText id="inputComponent" class="form-control" @bind-Value="person.Name"/>
+        </EditForm>
+    </div>
+    <div class="col-md-4">
+        <button type="button" class="btn btn-info" @onclick="FocusAndStyleComponent">
+            Click me!
+        </button>
+    </div>
+</div>
+<hr/>
+<div class="row">
+    <div class="col alert alert-danger">
+        @errorMessage
+    </div>
+</div>

@@ -5,11 +5,11 @@ VisualStudioVersion = 16.0.30907.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{8F67FA16-C353-4326-8F9E-9C2D3C1EAD66}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorProducts.Api", "src\BlazorProducts.Api\BlazorProducts.Api.csproj", "{2F7BDDE9-4C8D-4E21-B413-93E1CEC3E789}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorProducts.Api", "src\BlazorProducts.Api\BlazorProducts.Api.csproj", "{2F7BDDE9-4C8D-4E21-B413-93E1CEC3E789}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorProducts.Shared", "src\BlazorProducts.Shared\BlazorProducts.Shared.csproj", "{10DF1451-C00D-49A4-8471-E8713EAD42D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorProducts.Shared", "src\BlazorProducts.Shared\BlazorProducts.Shared.csproj", "{10DF1451-C00D-49A4-8471-E8713EAD42D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorProducts.Client", "src\BlazorProducts.Client\BlazorProducts.Client.csproj", "{0F369D72-4581-4796-BD87-DBEE8D7A80D0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorProducts.Client", "src\BlazorProducts.Client\BlazorProducts.Client.csproj", "{0F369D72-4581-4796-BD87-DBEE8D7A80D0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
