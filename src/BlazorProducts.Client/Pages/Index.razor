@@ -1,7 +1,14 @@
 ﻿@page "/"
 
-<h1>Hello, world!</h1>
+<Header Title="Welcome to Blazor WASM" @attributes="AdditionalAttributes ">
+    If you want to know more abour Blazor vist the <a href="https://docs.microsoft.com/en-us/aspnet/core/blazor/?view=aspnetcore-5.0">Docs</a>
+</Header>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+@code {
+    public Dictionary<string, object> AdditionalAttributes { get; set; } =
+        new Dictionary<string, object>
+        {
+            ["src"] = "https://dotnet.microsoft.com/static/images/illustrations/swimlane-blazor-shared-libraries.svg?v=o-UjoDAQqGUk_ArYL3EPhI_6VM92MEnrqthI8KY3Y08",
+            ["alt"] = "Blazor WASM"
+        };
+}

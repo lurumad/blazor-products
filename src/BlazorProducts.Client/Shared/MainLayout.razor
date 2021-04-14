@@ -11,7 +11,9 @@
         </div>
 
         <div class="content px-4">
-            @Body
+            <CascadingValue Name="TitleColor" Value="@color">
+                @Body
+            </CascadingValue>
         </div>
 
         <BlazoredToasts 
@@ -22,3 +24,7 @@
             ErrorIcon="oi oi-bug"/>
     </div>
 </div>
+
+@code {
+    private readonly string color = "#0505b5";
+}

@@ -1,0 +1,55 @@
+﻿@using Microsoft.Extensions.Logging
+
+@implements IDisposable
+
+
+<h1>@Title</h1>
+<p>Current counter: @CurrentCounter</p>
+
+@code { 
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public int CurrentCounter { get; set; }
+
+    [Inject]
+    public ILogger<CounterPrint> Logger { get; set; }
+
+    protected override void OnInitialized()
+    {
+        var logLevels = Enum.GetValues(typeof(LogLevel)).Cast<LogLevel>();
+
+        foreach (var logLevel in logLevels.Where(l => l != LogLevel.None))
+        {
+            Logger.Log(logLevel, logLevel.ToString());
+        }
+
+        Logger.LogInformation($"OnInitialized => Title {Title} CurrentCounter: {CurrentCounter}");
+    }
+
+    protected override void OnParametersSet()
+    {
+        Logger.LogInformation($"OnParametersSet => Title {Title} CurrentCounter: {CurrentCounter}");
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            Logger.LogInformation("First render");
+        }
+
+        base.OnAfterRender(firstRender);
+    }
+
+    protected override bool ShouldRender()
+    {
+        return false;
+    }
+
+    public void Dispose()
+    {
+        Logger.LogInformation("Dispose");
+    }
+}
