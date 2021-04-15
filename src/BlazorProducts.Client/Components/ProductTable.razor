@@ -10,7 +10,7 @@
         </tr>
     </thead>
     <tbody>
-        <Virtualize ItemsProvider="LoadProducts" Context="product" ItemSize="300">
+        <Virtualize @ref="virtualize" ItemsProvider="LoadProducts" Context="product">
             <ItemContent>
                 <tr>
                     <td>

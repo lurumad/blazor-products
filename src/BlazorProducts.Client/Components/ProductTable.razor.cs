@@ -12,6 +12,7 @@ namespace BlazorProducts.Client.Components
 {
     public partial class ProductTable
     {
+        private Virtualize<Product> virtualize;
         private Confirmation confirmation;
         private Guid productIdToDelete;
 
@@ -29,12 +30,12 @@ namespace BlazorProducts.Client.Components
 
         private async ValueTask<ItemsProviderResult<Product>> LoadProducts(ItemsProviderRequest request)
         {
-            var productNumber = Math.Min(request.Count, TotalSize - request.StartIndex);
+            var pageSize = Math.Min(request.Count, TotalSize - request.StartIndex);
 
             await OnScroll.InvokeAsync(new ProductParameters
             {
                 StartIndex = request.StartIndex,
-                PageSize = productNumber == 0 ? request.Count : productNumber
+                PageSize = pageSize == 0 ? request.Count : pageSize
             });
 
             return new ItemsProviderResult<Product>(Products, TotalSize);
@@ -50,6 +51,7 @@ namespace BlazorProducts.Client.Components
         {
             confirmation.Hide();
             await OnDelete.InvokeAsync(productIdToDelete);
+            await virtualize.RefreshDataAsync();
         }
     }
 }

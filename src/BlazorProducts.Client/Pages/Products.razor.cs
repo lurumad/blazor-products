@@ -35,6 +35,8 @@ namespace BlazorProducts.Client.Pages
         private async Task DeleteProduct(Guid id)
         {
             await Repository.Delete(id);
+            await LoadProducts(new ProductParameters());
+            StateHasChanged();
         }
 
         public void Dispose() => Interceptor.DisposeEvent();
